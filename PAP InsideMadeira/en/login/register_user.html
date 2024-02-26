@@ -287,7 +287,7 @@ footer a {
 			        <h1>Create Account</h1>
 			        <div class="social-container_sla">
 				        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-				        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+				        <a href="#" id="google" class="social"><i class="fab fa-google-plus-g"></i></a>
 				        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 			        </div>
 			        <span>or use your email for registration</span>
@@ -302,7 +302,7 @@ footer a {
 			        <h1>Sign in</h1>
 			        <div class="social-container_sla">
 				        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-				        <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+				        <a href="#" id="google" class="social"><i class="fab fa-google-plus-g"></i></a>
 				        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
 			        </div>
 			        <span>or use your account</span>
@@ -350,6 +350,15 @@ footer a {
                     container.classList.remove("right-panel-active");
                 });
             });
+
+			document.getElementById("google").addEventListener("click", function() {
+    			// Redirect user to Google's authentication endpoint
+    			window.location.href = "https://accounts.google.com/o/oauth2/auth" +
+        			"?response_type=code" +                  // Response type
+        			"&client_id=YOUR_CLIENT_ID" +            // Your client ID
+        			"&redirect_uri=YOUR_REDIRECT_URI" +     // Your redirect URI
+        			"&scope=openid%20email%20profile";      // Scopes (e.g., openid, email, profile)
+			});
         </script>
     </body>
 </html>
