@@ -29,7 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$hashed_password')";
 
     if ($conn->query($sql) === TRUE) {
-        echo "New user registered successfully";
+        header('Location: ../../front_page_login/index.html');
+        exit;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }

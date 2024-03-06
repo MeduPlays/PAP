@@ -11,7 +11,7 @@ die("Falha na conexao: " . mysqli_connect_error());
 //echo "Conexao realizada com sucesso";
 }
 
-<?php
+
 session_start();
 
 // Simulated user database
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($users[$username]) && $users[$username] === $password) {
         // Authentication successful, store user info in session
         $_SESSION['username'] = $username;
-        header("Location: ../front_page_login/index.html"); // Redirect to restricted page
+        header("Location: ../../front_page_login/index.html"); // Redirect to restricted page
         exit();
     } else {
         // Authentication failed, redirect back to login page
