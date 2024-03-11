@@ -1,40 +1,58 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "insidemadeira";
-
-$conn = mysqli_connect($servername, $username, $password, $database);
-if(!$conn){
-die("Falha na conexao: " . mysqli_connect_error());
-}else{
-//echo "Conexao realizada com sucesso";
-}
-
-
 session_start();
-
-// Simulated user database
-$users = [
-    'user1' => 'password1',
-    'user2' => 'password2'
-];
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $email = $_POST['email'];
+    $user_password = $_POST['password']; // Change variable name to avoid conflict
 
-    // Verify credentials
-    if (isset($users[$username]) && $users[$username] === $password) {
-        // Authentication successful, store user info in session
-        $_SESSION['username'] = $username;
-        header("Location: ../../front_page_login/index.html"); // Redirect to restricted page
-        exit();
+    // Database connection
+    $servername = "localhost";
+    $username = "root";
+    $db_password = ""; // Change variable name to avoid conflict
+    $database = "insidemadeira";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $db_password, $database);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Prepare a SQL statement to retrieve user data
+    $sql = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // User found, verify password
+        $row = $result->fetch_assoc();
+        if (password_verify($user_password, $row['password'])) {
+            // Authentication successful, store user info in session
+            $_SESSION['email'] = $email;
+            header('Location: ../../front_page_login/index.html'); // Redirect to restricted page
+            exit();
+        } else {
+            // Invalid password, redirect back to login page
+            header('Location: ../register_user.html?error=invalid_password');
+            exit();
+        }
     } else {
-        // Authentication failed, redirect back to login page
-        header("Location: register_user.html");
+        // User not found, redirect back to login page
+        header('Location: ../register_user.html?error=user_not_found');
         exit();
     }
+
+    $conn->close();
 }
 ?>
+
+
+<html>
+    <body>
+        <h1>hello world</h1>
+    </body>
+</html>
